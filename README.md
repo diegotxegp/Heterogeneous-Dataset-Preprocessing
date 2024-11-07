@@ -1,2 +1,2 @@
 # Heterogeneous-File-Preprocessing
-Code for preprocessing multiple files to create a unique dataset as input on a AutoML framework.
+Code for preprocessing multiple heterogeneous tables allocated in files to create a unique suitable dataset.
