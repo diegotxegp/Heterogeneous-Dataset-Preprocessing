@@ -9,10 +9,10 @@ class Preprocess:
 
     def select_folder(self):
         # Open a dialog to select a folder
-        selected_directory = askdirectory(title="Select a folder")
+        folder_path = askdirectory(title="Select a folder")
         
-        if selected_directory:
-            self.read_files_from_directory(selected_directory)
+        if folder_path:
+            return folder_path
         else:
             print("No folder was selected.")
 
