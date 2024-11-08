@@ -5,7 +5,7 @@ class FileLoader:
     """
     Class responsible for loading datasets based on their file type.
     """
-    def concat_files(self, file_paths):
+    def concatenate_files(self, file_paths):
         """
         Concatenates the dataframes of the files into a single dataframe.
         :param file_paths: List of paths to the files.
@@ -14,12 +14,12 @@ class FileLoader:
         df = pd.DataFrame()
 
         for filepath in file_paths:
-            file_df = self.load_file(filepath)
+            file_df = self._load_file(filepath)
             df = pd.concat([df, file_df], ignore_index=True)
 
         return df
 
-    def load_file(self, filepath):
+    def _load_file(self, filepath):
         """
         Loads the dataframe of the file based on its file extension.
         :param file_paths: List of paths to the files.
