@@ -2,6 +2,7 @@ from interface import Interface
 from directory_explorer import DirectoryExplorer
 from file_loader import FileLoader
 from dataframe_preprocessor import DataframePreprocessor
+from save_file import SaveFile
 
 class MainApp:
 
@@ -20,6 +21,9 @@ class MainApp:
 
         dataframe_preprocessor = DataframePreprocessor()
         df = dataframe_preprocessor.clean_dataframe(df)
+
+        save_file = SaveFile(df)
+        save_file.dataframe_to_parquet("output.parquet")
             
         
 
