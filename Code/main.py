@@ -6,7 +6,7 @@ from save_file import SaveFile
 
 class MainApp:
 
-    def run(allowed_formats):
+    def run(self,allowed_formats):
         """
         Main method that loads and processes the files.
         """
@@ -17,7 +17,7 @@ class MainApp:
         file_path = directory_explorer.find_files_according_to_formats(folder_path, allowed_formats)
         
         file_loader = FileLoader()
-        df = file_loader.concatenate_files(file_path)
+        df = file_loader.load_files(file_path)
 
         dataframe_preprocessor = DataframePreprocessor()
         df = dataframe_preprocessor.clean_dataframe(df)
@@ -29,7 +29,7 @@ class MainApp:
 
 if __name__ == "__main__":
     ########################################################################
-    allowed_formats = ['.csv', '.xlsx', '.ods', '.txt']
+    allowed_formats = ('.csv', '.xlsx', '.ods', '.txt')
     ########################################################################
 
     # Create an instance of MainApp

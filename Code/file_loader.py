@@ -5,7 +5,7 @@ class FileLoader:
     """
     Class responsible for loading datasets based on their file type.
     """
-    def concatenate_files(self, file_paths):
+    def load_files(self, file_paths):
         """
         Concatenates the dataframes of the files into a single dataframe.
         :param file_paths: List of paths to the files.
@@ -14,8 +14,9 @@ class FileLoader:
         df = pd.DataFrame()
 
         for filepath in file_paths:
+            print(f"Loading file: {filepath}")
             file_df = self._load_file(filepath)
-            df = pd.concat([df, file_df], ignore_index=True)
+            df = pd.concat([df, file_df], axis=1)
 
         return df
 
@@ -25,7 +26,7 @@ class FileLoader:
         :param file_paths: List of paths to the files.
         :return: pandas DataFrame with the file content.
         """
-        _, ext = os.path.splitext(filepath)
+        file_name, ext = os.path.splitext(filepath)
         
         if ext == '.csv':
             delimiter = self.detect_delimiter(filepath)
@@ -35,12 +36,12 @@ class FileLoader:
         elif ext == '.ods':
             return pd.read_excel(filepath, engine='odf')
         elif ext == '.txt':
-            delimiter = self.detect_delimiter(filepath)
+            delimiter = self._detect_delimiter(filepath)
             return pd.read_csv(filepath, delimiter=delimiter)
         else:
             raise ValueError(f"Unsupported file format: {ext}")
         
-    def detect_delimiter(self, filepath):
+    def _detect_delimiter(self, filepath):
         """
         Detects the delimiter used in a CSV file by checking the first line.
         :param filepath: Path to the CSV file.
@@ -58,4 +59,6 @@ class FileLoader:
             elif semicolon_count > comma_count:
                 return ';'
             else:
-                raise ValueError("Could not determine the delimiter; counts are equal or both are zero.")
+                print("One column has no delimiter. Setting default delimiter to comma (',').")
+                return ','
+                #raise ValueError("Could not determine the delimiter; counts are equal or both are zero.")
