@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 
+from dataframe_cleaner import DataframeCleaner
+
 class FileLoader:
     """
     Class responsible for loading datasets based on their file type.
@@ -16,7 +18,9 @@ class FileLoader:
         for filepath in file_paths:
             print(f"Loading file: {filepath}")
             file_df = self._load_file(filepath)
-            df = pd.concat([df, file_df], axis=1)
+            dataframe_cleaner = DataframeCleaner()
+            cleaned_df = dataframe_cleaner.clean_dataframe(file_df)
+            df = pd.concat([df, cleaned_df], axis=1)
 
         return df
 
@@ -29,7 +33,7 @@ class FileLoader:
         file_name, ext = os.path.splitext(filepath)
         
         if ext == '.csv':
-            delimiter = self.detect_delimiter(filepath)
+            delimiter = self._detect_delimiter(filepath)
             return pd.read_csv(filepath , delimiter=delimiter)
         elif ext in ['.xls', '.xlsx']:
             return pd.read_excel(filepath)
@@ -59,6 +63,6 @@ class FileLoader:
             elif semicolon_count > comma_count:
                 return ';'
             else:
-                print("One column has no delimiter. Setting default delimiter to comma (',').")
+                print("One column has no delimiter. Setting default delimiter to comma (',')")
                 return ','
                 #raise ValueError("Could not determine the delimiter; counts are equal or both are zero.")

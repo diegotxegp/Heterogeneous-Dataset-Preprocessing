@@ -1,10 +1,12 @@
 import os
 
+from parameters import allowed_formats
+
 class DirectoryExplorer:
     """
     Class responsible for traversing directories and finding files according to the given formats.
     """
-    def find_files_according_to_formats(self, base_directory, allowed_formats) -> list:
+    def find_files_according_to_formats(self, base_directory) -> list:
         """
         Walk through all directories and subdirectories, yielding files according to the given formats.
         :yield: File path.

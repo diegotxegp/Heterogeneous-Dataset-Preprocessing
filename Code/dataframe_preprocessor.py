@@ -4,12 +4,12 @@ class DataframePreprocessor:
         Cleans the dataframe by removing duplicate columns, merging fragmented columns, and dropping empty rows.
         :param dataframe: The dataframe to be cleaned.
         :return: The cleaned dataframe.
-        """
-        # 1. Remove duplicate columns (keep only the first occurrence)
+        """        
+        # 1. Identify fragmented columns and merge fragmented rows
+        #dataframe = self._clean_columns(dataframe)
+
+        # 2. Remove duplicate columns (keep only the first occurrence)
         dataframe = dataframe.loc[:, ~dataframe.columns.duplicated()]
-        
-        # 2. Identify fragmented columns and merge fragmented rows
-        dataframe = self._merge_fragmented_columns(dataframe)
         
         # 3. Drop empty rows if any
         dataframe.dropna(how='all', inplace=True)
@@ -19,17 +19,18 @@ class DataframePreprocessor:
         
         return dataframe
 
-    def _merge_fragmented_columns(self, dataframe):
+    def merge_fragmented_columns(self, dataframe):
         """
-        Merges fragmented columns by combining them into a single column.
+        Merges fragmented columns by combining its parts into a single column.
         :param dataframe: The dataframe to be cleaned.
         :return: The cleaned dataframe.
         """
-        # Check if columns contain fragmented values
-        for column in dataframe.columns:
-            # If there are empty cells in the column, attempt to combine data
-            if dataframe[column].isnull().any():
-                dataframe[column] = dataframe[column].ffill() + " " + dataframe[column].fillna("")
-                dataframe[column] = dataframe[column].str.strip()  # Clean up extra spaces
-            
-        return dataframe
+        # Current column names
+        columns = dataframe.columns
+
+        # Filter rows that contain any text matching the column names
+        dataframe = dataframe[~dataframe.apply(lambda row: row.astype(str).str.contains('|'.join(columns))).any(axis=1)].reset_index(drop=True)
+
+        merged_columns = dataframe.dropna().reset_index(drop=True)
+
+        return merged_columns
